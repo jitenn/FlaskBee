@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+
+  {{ wtf.quick_form(form) }}
+
+    <div class="hexagon-container d-flex">
+      <div class="containerhexagon">
+        <div class="hexagoncell"><span id="hex1"></span></div>
+        <div class="hexagoncell"><span id="hex2"></span></div>
+        <div class="hexagoncell"><span id="hex3"></span></div>
+        <div class="hexagoncell"><span id="hex4"></span></div>
+        <div class="hexagoncell"><span id="hex5"></span></div>
+        <div class="hexagoncell"><span id="hex6"></span></div>
+        <div class="hexagoncell" style="background-color: yellow; color: black;"><span id="hex7"></span></div>
+      </div>
+
+          <div class="guesses" width="100%"">
+            <h5><a href="#" id="shuffler">Shuffle The Hive</a></h5>
+            <br>
+            <br>
+            {% if session.get('correct_guesses') %}
+            <h5><u>Words Found: </u><i>( <b>Bold</b> = PANGRAM )</i></h5>
+            <div>
+              {% for guess in session.get('correct_guesses') %}
+                {% for word, pangram in session.get('game_answers') %}
+                  {% if guess == word and pangram == "PANGRAM" %}
+                    <b>{{ word }}</b>
+                  {% elif guess == word %}
+                    {{ word }}
+                  {% endif %} 
+                {% endfor %}
+                {% if loop.nextitem %} - {% endif %}
+              {% endfor %}
+
+              <!-- {{ session.get('correct_guesses') | join(' - ') }}  -->
+            </div>
+            {% endif %}
+            <hr>
+          </div>
+          
+        </div>
+          <div class="answers" width="50%">
+            <br>
+            <h5><a href="#" id="reveal-answers">Reveal / Hide Solution: </a> ( <b>Bold</b> = PANGRAM )</h5>
+            <div id="myanswers" style="display: none;">
+              {% for word, pangram in session.get('game_answers') %}
+                {% if pangram == "PANGRAM" %} <B> {% endif %}
+                  {% if session.get('correct_guesses') %}
+                      {% if word in session.get('correct_guesses') %}
+                        {{ word }}
+                      {% else %}
+                        <font color="red">{{ word }}</font> 
+                      {% endif %}
+                  {% else %}
+                    {{ word }}
+                  {% endif %}
+                {% if pangram == "PANGRAM" %} </B> {% endif %}
+                {% if loop.nextitem %} - {% endif %}
+              {% endfor %}
+            </div>
+            <hr>
+          </div>
+        
+  
+
+  <script>
+    function loadHexagonOld(c0, c1, c2, c3, c4, c5, c6) {
+      
+      document.getElementById("hex7").innerText=c0;
+      document.getElementById("hex1").innerText=c1;
+      document.getElementById("hex2").innerText=c2;
+      document.getElementById("hex3").innerText=c3;
+      document.getElementById("hex4").innerText=c4;
+      document.getElementById("hex5").innerText=c5;
+      document.getElementById("hex6").innerText=c6;
+      return 0;
+
+    }
+
+    function loadHexagons(characters) {
+      const hexagons = document.querySelectorAll('.hexagoncell'); 
+
+      for (let i = 0; i < Math.min(hexagons.length, characters.length); i++) {
+        hexagons[i].innerText = characters[i];
+      }
+    }
+
+    function shuffle(array) {
+      const shuffledArray = array.slice(0, 6); // Copy the first 6 elements
+      const lastElement = array[6];           // Store the 7th element
+
+      // Shuffle the first 6 elements (Fisher-Yates)
+      for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1)); 
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]]; 
+      }
+
+      shuffledArray.push(lastElement); // Append the 7th element 
+      return shuffledArray; 
+    }
+
+    // loadHexagons(["A","B","C","D","E","F","G"]);
+    myHive = {{ game_alphabets | tojson }};
+    // alert(myHive)
+    loadHexagons(myHive);
+
+
+    document.getElementById('reveal-answers').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default link behavior
+      var answersDiv = document.getElementById('myanswers');
+      answersDiv.style.display = (answersDiv.style.display === 'none') ? 'block' : 'none'; 
+      document.getElementById('guess').focus();
+    });
+
+    document.getElementById('shuffler').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default link behavior
+      myHive = shuffle(myHive);
+      loadHexagons(myHive);
+      document.getElementById('guess').focus();
+    });
+
+
+
+  </script>
+
+{% endblock %}

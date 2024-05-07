@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% import "bootstrap_wtf.html" as wtf %}
+
+{% block content %}
+<div style="margin-left: 20px;">
+  <h1>My homage to the NYT Spelling Bee game</h1>
+  <br>
+  <h2>How to Play Spelling Bee</h1>
+    <br>
+    Create words using letters from the hive.
+    <ul>
+      <li>Words must contain at least 4 letters.</li>
+      <li>Words must include the center letter.</li>
+      <li>Our word list does not include words that are obscure, hyphenated, or proper nouns.</li>
+      <li>No cussing either, sorry.</li>
+      <li>Letters can be used more than once.</li>
+    </ul>
+    {% if form %}
+        {{ wtf.quick_form(form) }}
+    {% endif %} 
+  </div>
+
+{% endblock %}
