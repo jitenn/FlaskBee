@@ -77,9 +77,12 @@ class setUpGame:
         self.gameAnswers = self.get_bees(gameAlphabets=self.gameAlphabets, 
                                          gameRequiredLetter=self.gameRequiredLetter,
                                          dictionaryWords=self.myDict)
+        self.gameRanks = self.get_ranks()
+
         print(self.gameAlphabets)
         print(self.gameRequiredLetter)
         print(self.gameAnswers)
+        print(self.get_ranks())
 
 
     def _has_suitable_letters(self, word):
@@ -112,13 +115,33 @@ class setUpGame:
     
     def get_bees(self, gameAlphabets, gameRequiredLetter, dictionaryWords):
         gameAnswers = []
-        # print(gameAlphabets)
-        # print(gameAlphabets[0])
+
         for word in dictionaryWords:
             if len(word) > 3 and set(word) >= set(gameRequiredLetter):
                 if set(word) <= set(gameAlphabets):
                     is_pangram = "PANGRAM" if set(word) == set(gameAlphabets) else ""
-                    gameAnswers.append((word, is_pangram))  # Create a tuple
+                    score = len(word) + len(is_pangram) if len(word) > 4 else 1
+                    gameAnswers.append((word, is_pangram, score))  # Create a tuple
                     
         # self.gameAnswers = gameAnswers
         return gameAnswers 
+    
+    def get_ranks(self):
+        gameScore = 0
+
+        for word, is_pangram, score in self.gameAnswers:
+            gameScore += score
+
+        gameRanks = [(0, "Beginner"),
+                     (int(gameScore * 0.02), "Good Start"),
+                     (int(gameScore * 0.05), "Moving Up"),
+                     (int(gameScore * 0.08), "Good"),
+                     (int(gameScore * 0.15), "Solid"),
+                     (int(gameScore * 0.25), "Nice"),
+                     (int(gameScore * 0.4), "Great"),
+                     (int(gameScore * 0.5), "Amazing"),
+                     (int(gameScore * 0.7), "Genius"),
+                     (gameScore, "Queen Bee!")
+                    ]
+        
+        return gameRanks

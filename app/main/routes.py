@@ -34,6 +34,7 @@ def newgame():
     session.pop('game_requiredletter', None)
     session.pop('game_alphabets', None) 
     session.pop('game_answers', None) 
+    session.pop('game_ranks', None) 
     session.pop('correct_guesses', None) 
 
     # Set up new game
@@ -45,6 +46,7 @@ def newgame():
     session['game_requiredletter'] = myGame.gameRequiredLetter
     session['game_alphabets'] = myGame.gameAlphabets
     session['game_answers'] = sorted(myGame.gameAnswers)
+    session['game_ranks'] = myGame.gameRanks
     
     flash('Generated new game - All the best!')
     
@@ -71,6 +73,8 @@ def spellingbee():
         print(session.get('correct_guesses'))
 
         return redirect(url_for('main.spellingbee'))
+    else:
+        print("Errors:", form.guess.errors) 
 
     page = request.args.get('page', 1, type=int)
 

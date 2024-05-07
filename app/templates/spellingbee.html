@@ -2,8 +2,8 @@
 {% import "bootstrap_wtf.html" as wtf %}
 
 {% block content %}
+  <!-- {{ wtf.quick_form(form) }} -->
 
-  {{ wtf.quick_form(form) }}
 
     <div class="hexagon-container d-flex">
       <div class="containerhexagon">
@@ -15,53 +15,74 @@
         <div class="hexagoncell"><span id="hex6"></span></div>
         <div class="hexagoncell" style="background-color: yellow; color: black;"><span id="hex7"></span></div>
       </div>
-
-          <div class="guesses" width="100%"">
-            <h5><a href="#" id="shuffler">Shuffle The Hive</a></h5>
-            <br>
-            <br>
-            {% if session.get('correct_guesses') %}
-            <h5><u>Words Found: </u><i>( <b>Bold</b> = PANGRAM )</i></h5>
-            <div>
-              {% for guess in session.get('correct_guesses') %}
-                {% for word, pangram in session.get('game_answers') %}
-                  {% if guess == word and pangram == "PANGRAM" %}
-                    <b>{{ word }}</b>
-                  {% elif guess == word %}
-                    {{ word }}
-                  {% endif %} 
+    
+      <div class="guesses" width="100%"">
+        <br><hr>
+        <div>
+          <form method="POST" action="" class="custom-form-container">
+            {{ form.hidden_tag() }} 
+            <div class="form-group">
+              <!-- {{ form.guess.label() }}  -->
+              {{ form.guess(class="form-control") }} 
+              {% if form.guess.errors %} 
+              <div class="errors">
+                {% for error in form.guess.errors %}
+                <font color="red">{{ error }}</font>
                 {% endfor %}
-                {% if loop.nextitem %} - {% endif %}
-              {% endfor %}
-
-              <!-- {{ session.get('correct_guesses') | join(' - ') }}  -->
+              </div>
+              {% endif %} 
             </div>
-            {% endif %}
-            <hr>
-          </div>
-          
+            <div>
+              <div>{{ form.submit(class="btn btn-primary") }}</div>
+              <div align="center">or</div>
+              <div class="btn btn-primary"><a href="#" id="shuffler"><font color="white">Shuffle The Hive</font></a></h5></div>
+            </div>
+          </form>
         </div>
-          <div class="answers" width="50%">
-            <br>
-            <h5><a href="#" id="reveal-answers">Reveal / Hide Solution: </a> ( <b>Bold</b> = PANGRAM )</h5>
-            <div id="myanswers" style="display: none;">
-              {% for word, pangram in session.get('game_answers') %}
-                {% if pangram == "PANGRAM" %} <B> {% endif %}
-                  {% if session.get('correct_guesses') %}
-                      {% if word in session.get('correct_guesses') %}
-                        {{ word }}
-                      {% else %}
-                        <font color="red">{{ word }}</font> 
-                      {% endif %}
-                  {% else %}
-                    {{ word }}
-                  {% endif %}
-                {% if pangram == "PANGRAM" %} </B> {% endif %}
-                {% if loop.nextitem %} - {% endif %}
-              {% endfor %}
-            </div>
-            <hr>
-          </div>
+        <br><br>
+      {% if session.get('correct_guesses') %}
+        <h5><u>Words Found: </u><i>( <b>Bold</b> = PANGRAM )</i></h5>
+        <div>
+          {% for guess in session.get('correct_guesses') %}
+            {% for word, pangram, score in session.get('game_answers') %}
+              {% if guess == word and pangram == "PANGRAM" %}
+                <b>{{ word }}</b>
+              {% elif guess == word %}
+                {{ word }}
+              {% endif %} 
+            {% endfor %}
+            {% if loop.nextitem %} - {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+        <hr>
+      </div>
+          
+    </div>  <!-- End of the hex div -->
+
+    <div class="answers" width="50%">
+      <br><br><hr>
+      <div class="btn btn-primary"><a href="#" id="reveal-answers"><font color="white">Reveal / Hide Solution: ( <b>Bold</b> = PANGRAM )</font></a></div>
+
+      <!-- <br><h5><a href="#" id="reveal-answers">Reveal / Hide Solution: </a> ( <b>Bold</b> = PANGRAM )</h5> -->
+      <div id="myanswers" style="display: none;">
+        {% for word, pangram, score in session.get('game_answers') %}
+          {% if pangram == "PANGRAM" %} <B> {% endif %}
+            {% if session.get('correct_guesses') %}
+                {% if word in session.get('correct_guesses') %}
+                  {{ word }}
+                {% else %}
+                  <font color="red">{{ word }}</font> 
+                {% endif %}
+            {% else %}
+              {{ word }}
+            {% endif %}
+          {% if pangram == "PANGRAM" %} </B> {% endif %}
+          {% if loop.nextitem %} - {% endif %}
+        {% endfor %}
+      </div>
+      <hr>
+    </div>
         
   
 

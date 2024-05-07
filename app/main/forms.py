@@ -18,7 +18,7 @@ class GuessForm(FlaskForm):
         validators.DataRequired()
         # validators.Length(min=4, message="Too short"),
         ])
-    submit = SubmitField('Submit')
+    submit = SubmitField('Try (Press Enter)')
 
     # Overloaded constructor accepts the game alphabets as an argument and saves in the object
     def __init__(self, game_alphabets, game_answers, *args, **kwargs):
@@ -29,7 +29,7 @@ class GuessForm(FlaskForm):
     # WTForms implements validate_<field name> as default validator for <field name>
     def validate_guess(self, guess):
         
-        allowed_words = [word[0].upper() for word in self.game_answers]
+        allowed_words = [word_pangram_score[0].upper() for word_pangram_score in self.game_answers]
 
         if len(guess.data.upper()) < 4:      
             raise ValidationError("Too short")
