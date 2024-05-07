@@ -4,9 +4,7 @@ from langdetect import detect, LangDetectException
 from app.main.forms import EmptyForm, GuessForm
 from app.main import bp
 from app.main.beeWords import loadDictionary, setUpGame
-# from app import myDictionary
 
-# print("routes")
 
 @bp.before_app_request
 def before_request():
@@ -17,53 +15,63 @@ def before_request():
 @bp.route('/index', methods=['GET', 'POST'])
 def index():
 
-    # session.pop('correct_guesses', None) 
-    # session.pop('game_answers', None) 
-
     form = EmptyForm()
+
     if form.validate_on_submit():
-        return redirect(url_for('main.spellingbee'))
+        if session.get('in_a_game', None) is None:
+            return redirect(url_for('main.newgame'))
+        else:
+            return redirect(url_for('main.spellingbee'))
 
     return render_template('index.html', title='Home', form=form)
+
 
 @bp.route('/newgame', methods=['GET', 'POST'])
 def newgame():
 
-    session.pop('correct_guesses', None) 
+    # Kill the session variables
+    session.pop('in_a_game', None) 
+    session.pop('game_requiredletter', None)
+    session.pop('game_alphabets', None) 
     session.pop('game_answers', None) 
+    session.pop('correct_guesses', None) 
 
-    current_app.myGame.select_random_word(current_app.myDictionary.dictionaryWords) 
-    myGame = current_app.myGame
+    # Set up new game
+    myGame = setUpGame(current_app.myDictionary.dictionaryWords) 
+
     print(myGame.gameAnswers)
 
+    session['in_a_game'] = True
+    session['game_requiredletter'] = myGame.gameRequiredLetter
+    session['game_alphabets'] = myGame.gameAlphabets
+    session['game_answers'] = sorted(myGame.gameAnswers)
+    
+    flash('Generated new game - All the best!')
+    
     return redirect(url_for('main.spellingbee'))
 
 
 @bp.route('/spellingbee', methods=['GET', 'POST'])
 def spellingbee():
     
-    myGame = current_app.myGame
+    # Check if myGame has already been created. If not, create new game first
+    # if not hasattr(current_app, 'myGame'):
+    if session.get('in_a_game', None) is None:
+        return redirect(url_for('main.newgame'))
+
+    # myGame = current_app.myGame
     
-    form = GuessForm(game_alphabets=myGame.gameAlphabets, game_answers=myGame.gameAnswers)
-    # print(myGame.gameAlphabets)
-    session['game_answers'] = sorted(myGame.gameAnswers)
+    form = GuessForm(game_alphabets=session['game_alphabets'], game_answers=session['game_answers'])
 
     if form.validate_on_submit():
-        # try:
-        #     language = detect(form.guess.data)
-        # except LangDetectException:
-        #     language = ''
 
         # flash(f'You guessed {form.guess.data}')
         session['correct_guesses'] = sorted(session.get('correct_guesses', []) + [form.guess.data.upper()])
-        print("here")
-        print(session['game_answers'])
-        print("here")
 
         print(session.get('correct_guesses'))
+
         return redirect(url_for('main.spellingbee'))
-        # return render_template('spellingbee.html', title='Home', form=form, game_alphabets = myGame.gameAlphabets, correct_guesses=form.guess.data)
 
     page = request.args.get('page', 1, type=int)
 
-    return render_template('spellingbee.html', title='Home', form=form, game_alphabets = myGame.gameAlphabets)
+    return render_template('spellingbee.html', title='Home', form=form, game_alphabets = session['game_alphabets'])

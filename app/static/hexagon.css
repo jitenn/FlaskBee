@@ -6,11 +6,11 @@
 }
 
 .hexagoncell {
-  grid-area:1/1;                    /* Occupy the first cell of the grid */
+  grid-area:1/1;                                /* Occupy the first cell of the grid */
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0 50%); /* Create a hexagonal shape */ 
-  background-color: ghostwhite;    /* Light yellow background */
-  box-shadow: inset 0 0 50px 25px yellow;  /* Inset box-shadow with a light orange color */
-  display: flex;                    /* Use flexbox for centering */
+  background-color: white;                    /* Light yellow background */
+  box-shadow: inset 0 0 40px 10px lightgray;  /* Inset box-shadow with a light orange color */
+  display: flex;                                /* Use flexbox for centering */
   justify-content: center;
   align-items: center;  
   font-size: 40px;                  

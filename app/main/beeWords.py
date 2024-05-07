@@ -1,11 +1,12 @@
 import requests
+from flask import current_app
 from collections import Counter
 import os
 import random
 import string
 
 class loadDictionary:
-    def __init__(self, listtype = "static") -> None:
+    def __init__(self, config, listtype = "static") -> None:
         """
         Validate gameAlphabets.
         
@@ -16,12 +17,14 @@ class loadDictionary:
             
         """
         print("Loading Dictionary")
+
         if listtype is None:
             listtype = "dynamic"
 
-        self.url = "https://ia803406.us.archive.org/31/items/csw21/CSW21.txt"
-        # self.filename="txtCollinsScrabbleWords2019.txt"
-        self.filename= os.path.join(os.path.dirname(__file__),"txtDictionary12Dicts.txt")
+        self.url = config['DICTIONARY_DYNAMIC']
+        self.filename= os.path.join(os.path.dirname(__file__), config['DICTIONARY_STATIC'])
+        # self.url = "https://ia803406.us.archive.org/31/items/csw21/CSW21.txt"
+        # self.filename= os.path.join(os.path.dirname(__file__),"txtDictionary12Dicts.txt")
         
         if listtype.lower() == "static":
             self.dictionaryWords = self._loadFromDictionaryStatic()
@@ -67,8 +70,10 @@ class setUpGame:
         self.myDict  = myDict
         possibleWord = self.select_random_word(myDict)
         print(possibleWord)
-        self.gameAlphabets = list(set(possibleWord))
-        self.gameRequiredLetter = self.gameAlphabets[-1]
+        self.gameRequiredLetter = possibleWord[-1]
+        # self.gameAlphabets = list(set(possibleWord))
+        self.gameAlphabets = list(set(possibleWord.replace(self.gameRequiredLetter,'')))
+        self.gameAlphabets.append(self.gameRequiredLetter)
         self.gameAnswers = self.get_bees(gameAlphabets=self.gameAlphabets, 
                                          gameRequiredLetter=self.gameRequiredLetter,
                                          dictionaryWords=self.myDict)
@@ -79,7 +84,8 @@ class setUpGame:
 
     def _has_suitable_letters(self, word):
         """Checks if a word has exactly 7 unique letters, and no 's' or 'q."""
-        return len(set(word)) == 7 and 'S' not in word.upper() and 'Q' not in word.upper()
+        return len(set(word)) == 7 and all(letter not in word.upper() for letter in current_app.config['LETTERS_TO_AVOID']) 
+        # return len(set(word)) == 7 and 'S' not in word.upper() and 'Q' not in word.upper()
 
 
     def select_random_word(self, word_list):
@@ -92,9 +98,11 @@ class setUpGame:
                 possibleWord = random.choice(eligible_words)
                 possibleBees = self.get_bees(list(possibleWord), possibleWord[-1], self.myDict)
 
-                if len(possibleBees) > 25 and len(possibleBees) <= 60:
+                if len(possibleBees) > current_app.config['BEES_MINIMUM'] and len(possibleBees) <= current_app.config['BEES_MAXIMUM']:
+                    print(len(possibleBees), possibleWord, possibleWord[-1])
                     self.gameAlphabets = list(set(possibleWord))
                     self.gameAnswers = possibleBees
+                    self.gameRequiredLetter = possibleWord[-1]
                 
                     return possibleWord
                     break

@@ -3,10 +3,10 @@ import os
 from dotenv import load_dotenv
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-print(f"basedir %", basedir)
+# print(f"basedir %", basedir)
 
 load_dotenv(os.path.join(basedir, '.env'))
-print(os.path.join(basedir, '.env'))
+# print(os.path.join(basedir, '.env'))
 
 class Config:
     
@@ -27,4 +27,13 @@ class Config:
 
     # Heroku related change to log to stdout 
     LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+
+    # Location of word dictionaries
+    DICTIONARY_STATIC = "txtDictionary12Dicts.txt"
+    DICTIONARY_DYNAMIC = "https://ia803406.us.archive.org/31/items/csw21/CSW21.txt"
+
+    # Puzzle generation parameters
+    LETTERS_TO_AVOID = "QS"
+    BEES_MINIMUM = 25
+    BEES_MAXIMUM = 50
 

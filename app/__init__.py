@@ -1,35 +1,23 @@
 from flask import Flask, current_app
 import os
-from flask_moment import Moment
 from config import Config
 import logging
 from logging.handlers import SMTPHandler, RotatingFileHandler
+# JITEN SESSION
 from app.main.beeWords import loadDictionary, setUpGame
-
-
-moment = Moment()
-# Load the dictonary
-# myDictionary = loadDictionary()
-# myGame = setUpGame(myDictionary.dictionaryWords)
-# print("in __init__.py")
-# print(myGame.gameAlphabets)
-# New game
-# myGame.select_random_word(myDictionary)
-# print(myGame.gameAlphabets)
-
+# from app.main.beeWords import loadDictionary
 
 
 def create_app(config_class=Config):
     
     app = Flask(__name__)
     
-    app.myDictionary = loadDictionary()
-    app.myGame = setUpGame(app.myDictionary.dictionaryWords) 
-    
     app.config.from_object(config_class)
-
-    moment.init_app(app)
-
+    
+    app.myDictionary = loadDictionary(config=app.config, listtype="static")
+    # JITEN SESSION
+    # app.myGame = setUpGame(app.myDictionary.dictionaryWords) 
+    
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
 
