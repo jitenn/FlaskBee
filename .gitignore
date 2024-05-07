@@ -8,4 +8,11 @@
 /FlaskBee/migrations/versions/__pycache__
 /FlaskBee/logs/
 /logs/
-
+/__pycache__
+/__pycache__/
+/app/__pycache__
+/app/__pycache__/
+/app/main/__pycache__
+/app/main/__pycache__/
+/migrations/__pycache__
+/migrations/versions/__pycache__
