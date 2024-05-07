@@ -24,7 +24,7 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     
     app.myDictionary = loadDictionary()
-    app.myGame = setUpGame(app.myDictionary.dictionaryWords)
+    app.myGame = setUpGame(app.myDictionary.dictionaryWords) 
     
     app.config.from_object(config_class)
 
