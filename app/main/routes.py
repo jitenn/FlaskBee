@@ -74,6 +74,9 @@ def spellingbee():
 
         # flash(f'You guessed {form.guess.data}')
         session['correct_guesses'] = sorted(session.get('correct_guesses', []) + [form.guess.data.upper()])
+        
+        tempDict = {word: value for word, _, value in session['game_answers']}
+        print("score", tempDict.get(form.guess.data.upper()))
 
         print(session.get('correct_guesses'))
 
