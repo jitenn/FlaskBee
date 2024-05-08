@@ -35,6 +35,8 @@ def newgame():
     session.pop('game_alphabets', None) 
     session.pop('game_answers', None) 
     session.pop('game_ranks', None) 
+    session.pop('current_rank', None)
+    session.pop('current_score', None)
     session.pop('correct_guesses', None) 
 
     # Set up new game
@@ -47,6 +49,9 @@ def newgame():
     session['game_alphabets'] = myGame.gameAlphabets
     session['game_answers'] = sorted(myGame.gameAnswers)
     session['game_ranks'] = myGame.gameRanks
+    session['current_score'] = 0
+    session['current_rank'] = myGame.gameRanks[0][1]
+    print(session['current_rank'])
     
     flash('Generated new game - All the best!')
     

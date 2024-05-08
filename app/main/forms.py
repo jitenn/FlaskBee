@@ -14,10 +14,16 @@ class EditProfileForm(FlaskForm):
 
 
 class GuessForm(FlaskForm):
-    guess = StringField('Guess', [
-        validators.DataRequired()
-        # validators.Length(min=4, message="Too short"),
-        ])
+    guess = StringField('Guess', 
+                        [validators.DataRequired()], 
+                        render_kw={'style': ' \
+                                   text-transform: uppercase; \
+                                   font-weight: bold; \
+                                   letter-spacing: 1px; \
+                                   font-size: 20px \
+                                   '}
+                        )
+        
     submit = SubmitField('Try (Press Enter)')
 
     # Overloaded constructor accepts the game alphabets as an argument and saves in the object

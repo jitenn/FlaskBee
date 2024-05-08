@@ -4,14 +4,14 @@
 {% block content %}
   <!-- {{ wtf.quick_form(form) }} -->
 
-<div class="container mt-3">
+<div>
   <div class="guesses" width="100%"">
     <hr>
     <form method="POST" action="" class="custom-form-container">
       {{ form.hidden_tag() }} 
       <div class="form-group">
         <!-- {{ form.guess.label() }}  -->
-        {{ form.guess(class="form-control", autocomplete="off") }} 
+        {{ form.guess(class="form-control") }} 
         {% if form.guess.errors %} 
         <div class="errors">
           {% for error in form.guess.errors %}
@@ -28,7 +28,6 @@
     </form>
     <script>
       document.getElementById('{{ form.guess.id }}').focus(); 
-      document.getElementById('{{ form.guess.id }}').select(); 
     </script>
 
   </div>
@@ -46,8 +45,8 @@
     
       <div class="guesses" width="100%"">
       <br><hr>
-      <h5><u>{{ session.get('current_rank') }}</u> >---->----->-----0------0------0------0</h5>
       {% if session.get('correct_guesses') %}
+        <h5><u>Words Found: </u><i>( <b>Bold</b> = PANGRAM )</i></h5>
         <div>
           {% for guess in session.get('correct_guesses') %}
             {% for word, pangram, score in session.get('game_answers') %}
@@ -61,31 +60,36 @@
           {% endfor %}
         </div>
       {% endif %}
-        
-        <br><br><br><br><hr>
-        <div class="btn btn-primary"><a href="#" id="reveal-answers"><font color="white">Reveal / Hide Solution: ( <b>Bold</b> = PANGRAM )</font></a></div>
-  
-        <div id="myanswers" style="display: none;">
-          {% for word, pangram, score in session.get('game_answers') %}
-            {% if pangram == "PANGRAM" %} <B> {% endif %}
-              {% if session.get('correct_guesses') %}
-                  {% if word in session.get('correct_guesses') %}
-                    {{ word }}
-                  {% else %}
-                    <font color="red">{{ word }}</font> 
-                  {% endif %}
-              {% else %}
-                {{ word }}
-              {% endif %}
-            {% if pangram == "PANGRAM" %} </B> {% endif %}
-            {% if loop.nextitem %} - {% endif %}
-          {% endfor %}
-        </div>
-  
+        <hr>
       </div>
           
     </div>  <!-- End of the hex div -->
   </div>
+
+    <div class="answers" width="50%">
+      <br><br><hr>
+      <div class="btn btn-primary"><a href="#" id="reveal-answers"><font color="white">Reveal / Hide Solution: ( <b>Bold</b> = PANGRAM )</font></a></div>
+
+      <!-- <br><h5><a href="#" id="reveal-answers">Reveal / Hide Solution: </a> ( <b>Bold</b> = PANGRAM )</h5> -->
+      <div id="myanswers" style="display: none;">
+        {% for word, pangram, score in session.get('game_answers') %}
+          {% if pangram == "PANGRAM" %} <B> {% endif %}
+            {% if session.get('correct_guesses') %}
+                {% if word in session.get('correct_guesses') %}
+                  {{ word }}
+                {% else %}
+                  <font color="red">{{ word }}</font> 
+                {% endif %}
+            {% else %}
+              {{ word }}
+            {% endif %}
+          {% if pangram == "PANGRAM" %} </B> {% endif %}
+          {% if loop.nextitem %} - {% endif %}
+        {% endfor %}
+      </div>
+      <hr>
+    </div>
+        
   
 
   <script>
@@ -132,11 +136,9 @@
 
     document.getElementById('reveal-answers').addEventListener('click', function(event) {
       event.preventDefault(); // Prevent default link behavior
-      if (confirm("Are you sure?")) {
-        var answersDiv = document.getElementById('myanswers');
-        answersDiv.style.display = (answersDiv.style.display === 'none') ? 'block' : 'none'; 
-        document.getElementById('guess').focus();
-      }
+      var answersDiv = document.getElementById('myanswers');
+      answersDiv.style.display = (answersDiv.style.display === 'none') ? 'block' : 'none'; 
+      document.getElementById('guess').focus();
     });
 
     document.getElementById('shuffler').addEventListener('click', function(event) {
