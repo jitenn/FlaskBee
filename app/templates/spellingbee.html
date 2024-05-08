@@ -46,7 +46,7 @@
     
       <div class="guesses" width="100%"">
       <br><hr>
-      <h5><u>{{ session.get('current_rank') }}</u> >---->----->-----0------0------0------0</h5>
+      <h5><u>{{ session.get('current_rank') }} ({{session.get('current_score')}}) </u> </h5>
       {% if session.get('correct_guesses') %}
         <div>
           {% for guess in session.get('correct_guesses') %}

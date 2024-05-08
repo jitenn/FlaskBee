@@ -75,14 +75,33 @@ def spellingbee():
         # flash(f'You guessed {form.guess.data}')
         session['correct_guesses'] = sorted(session.get('correct_guesses', []) + [form.guess.data.upper()])
         
-        tempDict = {word: value for word, _, value in session['game_answers']}
-        print("score", tempDict.get(form.guess.data.upper()))
+        tempDictScore = {word: value for word, _, value in session['game_answers']}
+        tempDictPangram = {word: isPangram for word, isPangram, _ in session['game_answers']}
+        
+        flash(f'{tempDictScore.get(form.guess.data.upper())} points. {tempDictPangram.get(form.guess.data.upper())}')
+        
+        session['current_score'] += tempDictScore.get(form.guess.data.upper())
+        
+        tempLastRank = session['game_ranks'][0][1]
+        for cutoff, rank in session['game_ranks']:
+            if session['current_score'] < cutoff:
+                session['current_rank'] = tempLastRank
+                break
+            tempLastRank = rank
+        
+        print(session['current_score'])
+        print(session['current_rank'])
 
         print(session.get('correct_guesses'))
 
         return redirect(url_for('main.spellingbee'))
     else:
-        print("Errors:", form.guess.errors) 
+        if len(form.guess.errors) > 0:
+            flash(f'Try again. {form.guess.errors[0]}')
+        print("here")
+        print(len(form.guess.errors))
+        print(form.guess.errors)
+
 
     page = request.args.get('page', 1, type=int)
 
