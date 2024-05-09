@@ -80,7 +80,7 @@ def spellingbee():
         tempDictScore = {word: value for word, _, value in session['game_answers']}
         tempDictPangram = {word: isPangram for word, isPangram, _ in session['game_answers']}
         
-        flash(f'{tempDictScore.get(form.guess.data.upper())} points. {tempDictPangram.get(form.guess.data.upper())}')
+        flash(f'{tempDictPangram.get(form.guess.data.upper())}  Points: {tempDictScore.get(form.guess.data.upper()) }')
         
         session['current_score'] += tempDictScore.get(form.guess.data.upper())
         

@@ -3,15 +3,15 @@ import os
 # from app.main.beeWords import loadDictionary, setUpGame
 # from app.models import User, Post, Message, Notification, Task
 
-myBeeApp = create_app() 
+bee = create_app() 
 
 
-@myBeeApp.shell_context_processor
+@bee.shell_context_processor
 def make_shell_context():
-    return {'app': myBeeApp, 'os': os}
+    return {'app': bee, 'os': os}
 
 # Run flask app when invoked from interactive shell
 # Commment this out to invoke from shell and debug
 if __name__ == '__main__':
-    myBeeApp.run(port = 5555, debug = True)
+    bee.run(port = 5555, debug = True)
 
