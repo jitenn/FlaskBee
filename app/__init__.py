@@ -15,8 +15,6 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
     
     app.myDictionary = loadDictionary(config=app.config, listtype="static")
-    # JITEN SESSION
-    # app.myGame = setUpGame(app.myDictionary.dictionaryWords) 
     
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)

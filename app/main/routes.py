@@ -38,6 +38,7 @@ def newgame():
     session.pop('current_rank', None)
     session.pop('current_score', None)
     session.pop('correct_guesses', None) 
+    session.pop('max_score', None)
 
     # Set up new game
     myGame = setUpGame(current_app.myDictionary.dictionaryWords) 
@@ -51,9 +52,10 @@ def newgame():
     session['game_ranks'] = myGame.gameRanks
     session['current_score'] = 0
     session['current_rank'] = myGame.gameRanks[0][1]
+    session['max_score'] = myGame.gameRanks[-1][0]
     print(session['current_rank'])
     
-    flash('Generated new game - All the best!')
+    flash('New game generated - all the best!')
     
     return redirect(url_for('main.spellingbee'))
 
@@ -82,12 +84,16 @@ def spellingbee():
         
         session['current_score'] += tempDictScore.get(form.guess.data.upper())
         
-        tempLastRank = session['game_ranks'][0][1]
-        for cutoff, rank in session['game_ranks']:
-            if session['current_score'] < cutoff:
-                session['current_rank'] = tempLastRank
-                break
-            tempLastRank = rank
+        if session['current_score'] == session['max_score']:
+            flash(f"C O N G R A T U L A T I O N S - You are Queen Bee!!")
+            session['current_rank'] = session['game_ranks'][-1][1]
+        else:
+            tempLastRank = session['game_ranks'][0][1]
+            for cutoff, rank in session['game_ranks']:
+                if session['current_score'] < cutoff:
+                    session['current_rank'] = tempLastRank
+                    break
+                tempLastRank = rank
         
         print(session['current_score'])
         print(session['current_rank'])
@@ -97,7 +103,7 @@ def spellingbee():
         return redirect(url_for('main.spellingbee'))
     else:
         if len(form.guess.errors) > 0:
-            flash(f'Try again. {form.guess.errors[0]}')
+            flash(f'Try again. {form.guess.errors[0]}', 'error')
         print("here")
         print(len(form.guess.errors))
         print(form.guess.errors)

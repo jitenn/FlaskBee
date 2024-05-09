@@ -34,6 +34,6 @@ class Config:
 
     # Puzzle generation parameters
     LETTERS_TO_AVOID = "QS"
-    BEES_MINIMUM = 25
+    BEES_MINIMUM = 5
     BEES_MAXIMUM = 50
 

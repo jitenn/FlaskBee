@@ -98,3 +98,10 @@
   border-radius: 4px; 
   cursor: pointer; 
 }
+
+.flash.error { 
+  background-color: #ffcccc; /* Light red for errors */
+}
+.flash.success {
+  background-color: #ccffcc; /* Light green for success */
+}
