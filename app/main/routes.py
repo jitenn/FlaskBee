@@ -45,6 +45,7 @@ def newgame():
     myGame = setUpGame(current_app.myDictionary.dictionaryWords) 
 
     print(f'New Game Traffic From : {request.remote_addr}')
+    print(request.headers.getlist("X-Forwarded-For"))
     print(myGame.gameAnswers)
 
     session['in_a_game'] = True
