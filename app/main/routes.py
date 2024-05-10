@@ -42,7 +42,8 @@ def newgame():
     # Set up new game
     myGame = setUpGame(current_app.myDictionary.dictionaryWords) 
 
-    # print(myGame.gameAnswers)
+    print(f'Traffic from : {request.remote_addr}')
+    print(myGame.gameAnswers)
 
     session['in_a_game'] = True
     session['game_requiredletter'] = myGame.gameRequiredLetter
@@ -103,9 +104,8 @@ def spellingbee():
     else:
         if len(form.guess.errors) > 0:
             flash(f'Try again. {form.guess.errors[0]}', 'error')
-        print("here")
-        print(len(form.guess.errors))
-        print(form.guess.errors)
+        # print(len(form.guess.errors))
+        # print(form.guess.errors)
 
 
     page = request.args.get('page', 1, type=int)

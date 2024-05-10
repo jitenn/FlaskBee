@@ -1,6 +1,7 @@
 # Configuration file to store key variables
 import os
 from dotenv import load_dotenv
+from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 # print(f"basedir %", basedir)
@@ -36,4 +37,6 @@ class Config:
     LETTERS_TO_AVOID = "QS"
     BEES_MINIMUM = 20
     BEES_MAXIMUM = 50
+    
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=30) 
 
