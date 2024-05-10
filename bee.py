@@ -13,5 +13,5 @@ def make_shell_context():
 # Run flask app when invoked from interactive shell
 # Commment this out to invoke from shell and debug
 if __name__ == '__main__':
-    bee.run(port = 5555, debug = True)
+    bee.run(port = 5555, debug = False)
 
