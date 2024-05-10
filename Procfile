@@ -1,1 +1,1 @@
-web: gunicorn app:myBeeApp
+web: gunicorn app:bee
