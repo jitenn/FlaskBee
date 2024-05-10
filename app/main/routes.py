@@ -22,6 +22,7 @@ def index():
         else:
             return redirect(url_for('main.spellingbee'))
 
+    print(f'Home Page Traffic From : {request.remote_addr}')
     return render_template('index.html', title='Home', form=form)
 
 
@@ -42,7 +43,7 @@ def newgame():
     # Set up new game
     myGame = setUpGame(current_app.myDictionary.dictionaryWords) 
 
-    print(f'Traffic from : {request.remote_addr}')
+    print(f'New Game Traffic From : {request.remote_addr}')
     print(myGame.gameAnswers)
 
     session['in_a_game'] = True
