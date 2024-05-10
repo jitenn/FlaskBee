@@ -4,6 +4,8 @@
 /FlaskBee/app/__pycache__/
 /FlaskBee/app/main/__pycache__
 /FlaskBee/app/main/__pycache__/
+/FlaskBee/app/errors/__pycache__
+/FlaskBee/app/errors/__pycache__/
 /FlaskBee/migrations/__pycache__
 /FlaskBee/migrations/versions/__pycache__
 /FlaskBee/logs/

@@ -42,7 +42,7 @@ def newgame():
     # Set up new game
     myGame = setUpGame(current_app.myDictionary.dictionaryWords) 
 
-    print(myGame.gameAnswers)
+    # print(myGame.gameAnswers)
 
     session['in_a_game'] = True
     session['game_requiredletter'] = myGame.gameRequiredLetter
@@ -52,7 +52,7 @@ def newgame():
     session['current_score'] = 0
     session['current_rank'] = myGame.gameRanks[0][1]
     session['max_score'] = myGame.gameRanks[-1][0]
-    print(session['current_rank'])
+    # print(session['current_rank'])
     
     flash('New game generated - all the best!')
     
@@ -94,10 +94,10 @@ def spellingbee():
                     break
                 tempLastRank = rank
         
-        print(session['current_score'])
-        print(session['current_rank'])
+        # print(session['current_score'])
+        # print(session['current_rank'])
 
-        print(session.get('correct_guesses'))
+        # print(session.get('correct_guesses'))
 
         return redirect(url_for('main.spellingbee'))
     else:
