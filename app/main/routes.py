@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 from flask import render_template, flash, redirect, url_for, request, g, current_app, session
-from langdetect import detect, LangDetectException
 from app.main.forms import EmptyForm, GuessForm
 from app.main import bp
 from app.main.beeWords import loadDictionary, setUpGame
