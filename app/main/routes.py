@@ -23,6 +23,7 @@ def index():
             return redirect(url_for('main.spellingbee'))
 
     print(f'Home Page Traffic From : {request.remote_addr}')
+    print(request.headers.getlist("X-Forwarded-For"))
     return render_template('index.html', title='Home', form=form)
 
 
